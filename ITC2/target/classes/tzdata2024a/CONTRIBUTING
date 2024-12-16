@@ -31,6 +31,8 @@ if available.
 For changes that fix sensitive security-related bugs, please see the
 distribution's 'SECURITY' file.
 
+If you encounter any issues, please report them via email as described in the SECURITY file.
+
 Please submit changes against either the latest release
 <https://www.iana.org/time-zones> or the main branch of the development
 repository.  The latter is preferred.

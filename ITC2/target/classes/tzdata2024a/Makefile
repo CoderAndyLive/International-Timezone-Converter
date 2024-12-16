@@ -1342,6 +1342,11 @@ strftime.o:	private.h tzfile.h
 zdump.o:	version.h
 zic.o:		private.h tzfile.h tzdir.h version.h
 
+# Add a target for running tests
+test:
+	@echo "Running tests..."
+	# Add your test commands here
+
 .PHONY: ALL INSTALL all
 .PHONY: check check_mild check_time_t_alternatives
 .PHONY: check_web check_zishrink
