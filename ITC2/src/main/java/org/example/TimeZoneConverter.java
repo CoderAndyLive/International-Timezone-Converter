@@ -5,9 +5,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
-public class TimeZoneConverter{
+public class TimeZoneConverter {
     private static final Scanner scanner = new Scanner(System.in);
-    private static boolean isMilitaryTime = false;  // Standardmäßig im 12-Stunden-Format
+    private static boolean isMilitaryTime = false;  // Default to 12-hour format
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private static final FavoriteZones favoriteZones = new FavoriteZones();
     private static boolean showMainMenu = true;
@@ -22,15 +22,15 @@ public class TimeZoneConverter{
         }
     }
 
-    // Hauptmenü anzeigen mit displaymenu
+    // Display main menu
     private static void displayMainMenu() {
         System.out.println("****************************************");
         System.out.println("*          TIME ZONE CONVERTER         *");
         System.out.println("****************************************");
-        System.out.println("Klicke (X) für Alle Commands");
+        System.out.println("Press (X) for All Commands");
     }
 
-    // Benutzereingaben verarbeiten
+    // Handle user input
     private static void handleUserInput() {
         String input = scanner.nextLine();
         switch (input.toUpperCase()) {
@@ -41,52 +41,54 @@ public class TimeZoneConverter{
             case "D" -> removeFromFavorites();
             case "V" -> favoriteZones.listFavorites();
             case "S" -> displaySettingsMenu();
-            case "B" -> showMainMenu = true; // Setze Flag auf true, um das Hauptmenü erneut anzuzeigen
+            case "B" -> showMainMenu = true; // Set flag to true to show main menu again
             case "Q" -> {
-                System.out.println("Auf Wiedersehen!");
+                System.out.println("Goodbye!");
                 System.exit(0);
             }
-            default -> System.out.println("Ungültige Eingabe. Bitte versuche es erneut.");
+            case "T" -> runTests(); // Add a case for running tests
+            default -> System.out.println("Invalid input. Please try again.");
         }
     }
 
-    // Zeitzone aus Favoriten entfernen
+    // Remove timezone from favorites
     private static void removeFromFavorites() {
-        System.out.println("Gebe die Zeitzone ein, die du aus den Favoriten entfernen möchtest:");
+        System.out.println("Enter the timezone you want to remove from favorites:");
         String zoneId = scanner.nextLine();
         favoriteZones.removeFavorite(zoneId);
     }
 
-    // Verfügbare Befehle anzeigen
+    // Display available commands
     private static void displayCommands() {
         System.out.println("COMMANDS:");
-        System.out.println("(O) Anleitung");
-        System.out.println("(L) Alle Zeitzonen Auflisten");
-        System.out.println("(F) Zu Favoriten Hinzufügen");
-        System.out.println("(V) Favoriten anzeigen");
-        System.out.println("(D) Favoriten löschen");
-        System.out.println("(S) Einstellungen");
-        System.out.println("(B) Zurück ");
+        System.out.println("(O) Instructions");
+        System.out.println("(L) List All Timezones");
+        System.out.println("(F) Add to Favorites");
+        System.out.println("(V) View Favorites");
+        System.out.println("(D) Delete from Favorites");
+        System.out.println("(S) Settings");
+        System.out.println("(B) Back");
         System.out.println("(Q) Quit");
+        System.out.println("(T) Run Tests"); // Add a command for running tests
         System.out.println("\n----------------------------------------------------------------------\n");
     }
 
-    // Anleitung anzeigen
+    // Display instructions
     private static void displayInstructions() {
         System.out.println("----------------------------------------------------------------------");
-        System.out.println("ANLEITUNG: ");
-        System.out.println("1. Gebe deine Zeitzone ein: \t\t(Beispiel: Europe/Berlin)");
-        System.out.println("2. Gebe die Zeit zum Konvertieren ein: \t(Beispiel: 2024-04-16 15:30)");
-        System.out.println("3. Gebe deine Zielzeitzone ein: \t(Beispiel: America/Los_Angeles) ");
-        System.out.println("Drücke Enter zum Konvertieren.\n");
-        System.out.println("AUSGABE KANN SO AUSSEHEN");
+        System.out.println("INSTRUCTIONS: ");
+        System.out.println("1. Enter your timezone: \t\t(Example: Europe/Berlin)");
+        System.out.println("2. Enter the time to convert: \t(Example: 2024-04-16 15:30)");
+        System.out.println("3. Enter your target timezone: \t(Example: America/Los_Angeles) ");
+        System.out.println("Press Enter to convert.\n");
+        System.out.println("OUTPUT MAY LOOK LIKE THIS");
         System.out.println("--------------------------------------------");
-        System.out.println("Konvertierte Zeit: 2024-04-16 06:30 PST");
+        System.out.println("Converted Time: 2024-04-16 06:30 PST");
         System.out.println("--------------------------------------------\n");
         System.out.println("\n");
-        System.out.println("ZEITZONECONVERTER COMMANDS:");
-        System.out.println("(C) TimeZone Converter Starten");
-        System.out.println("(B) Zurück");
+        System.out.println("TIMEZONE CONVERTER COMMANDS:");
+        System.out.println("(C) Start TimeZone Converter");
+        System.out.println("(B) Back");
         System.out.println("(Q) Quit");
         System.out.println("\n----------------------------------------------------------------------\n");
         String input = scanner.nextLine();
@@ -94,63 +96,63 @@ public class TimeZoneConverter{
             case "C" -> convertTime();
             case "B" -> showMainMenu = true;
             case "Q" -> {
-                System.out.println("Auf Wiedersehen!");
+                System.out.println("Goodbye!");
                 System.exit(0);
             }
-            default -> System.out.println("Ungültige Eingabe. Bitte versuche es erneut.");
+            default -> System.out.println("Invalid input. Please try again.");
         }
     }
 
-    // Zeit konvertieren
+    // Convert time
     private static void convertTime() {
-        System.out.println("Gebe deine Zeitzone ein: ");
+        System.out.println("Enter your timezone: ");
         String sourceZoneId = scanner.nextLine();
         ZoneId sourceZone;
         try {
             sourceZone = ZoneId.of(sourceZoneId);
         } catch (DateTimeException e) {
-            System.out.println("Ungültige Zeitzone. Bitte erneut eingeben.");
+            System.out.println("Invalid timezone. Please try again.");
             return;
         }
 
         LocalDateTime timeToConvert = null;
         while (timeToConvert == null) {
-            System.out.println("Gebe die Zeit zum Konvertieren ein (Format: yyyy-MM-dd HH:mm): ");
+            System.out.println("Enter the time to convert (Format: yyyy-MM-dd HH:mm): ");
             String inputTime = scanner.nextLine();
             try {
                 timeToConvert = LocalDateTime.parse(inputTime, formatter);
             } catch (DateTimeParseException e) {
-                System.out.println("Ungültiges Zeitformat. Bitte erneut eingeben.");
+                System.out.println("Invalid time format. Please try again.");
             }
         }
 
-        System.out.println("Gebe deine Zielzeitzone ein: ");
+        System.out.println("Enter your target timezone: ");
         String targetZoneId = scanner.nextLine();
         ZoneId targetZone;
         try {
             targetZone = ZoneId.of(targetZoneId);
         } catch (DateTimeException e) {
-            System.out.println("Ungültige Zeitzone. Bitte erneut eingeben.");
+            System.out.println("Invalid timezone. Please try again.");
             return;
         }
 
         ZonedDateTime zonedDateTime = ZonedDateTime.of(timeToConvert, sourceZone);
         ZonedDateTime convertedZonedDateTime = zonedDateTime.withZoneSameInstant(targetZone);
 
-        System.out.println("\nKonvertierte Zeit: " + formatTime(convertedZonedDateTime) + " " + targetZoneId);
+        System.out.println("\nConverted Time: " + formatTime(convertedZonedDateTime) + " " + targetZoneId);
         System.out.println("--------------------------------------------\n");
     }
 
-    // Zeitzonen anzeigen
+    // Display timezones
     private static void displayTimeZones() {
-        System.out.println("Liste aller Zeitzonen:");
+        System.out.println("List of all timezones:");
         System.out.println("--------------------------------------------");
-        System.out.println("(AF) Afrika");
-        System.out.println("(AM) Amerika");
-        System.out.println("(AA) Asien");
-        System.out.println("(EU) Europa");
-        System.out.println("(OZ) Ozeanien");
-        System.out.println("(ALL) Alle");
+        System.out.println("(AF) Africa");
+        System.out.println("(AM) America");
+        System.out.println("(AA) Asia");
+        System.out.println("(EU) Europe");
+        System.out.println("(OZ) Oceania");
+        System.out.println("(ALL) All");
         System.out.println("--------------------------------------------");
         String input = scanner.nextLine();
         String[] zoneIds;
@@ -162,7 +164,7 @@ public class TimeZoneConverter{
             case "EU" -> zoneIds = filterZonesByContinent("Europe");
             case "OZ" -> zoneIds = filterZonesByContinent("Oceania");
             default -> {
-                System.out.println("Ungültige Eingabe. Bitte versuche es erneut.");
+                System.out.println("Invalid input. Please try again.");
                 return;
             }
         }
@@ -172,28 +174,28 @@ public class TimeZoneConverter{
         System.out.println("--------------------------------------------\n");
     }
 
-    // Zeitzonen nach Kontinent filtern
+    // Filter timezones by continent
     private static String[] filterZonesByContinent(String continent) {
         return ZoneId.getAvailableZoneIds().stream()
                 .filter(zoneId -> zoneId.startsWith(continent))
                 .toArray(String[]::new);
     }
 
-    // Zeitzone zu den Favoriten hinzufügen
+    // Add timezone to favorites
     private static void addToFavorites() {
-        System.out.println("Gebe die Zeitzone ein, die du zu den Favoriten hinzufügen möchtest:");
+        System.out.println("Enter the timezone you want to add to favorites:");
         String zoneId = scanner.nextLine();
         favoriteZones.addFavorite(zoneId);
     }
 
-    // Einstellungsmenü anzeigen
+    // Display settings menu
     private static void displaySettingsMenu() {
         System.out.println("****************************************");
-        System.out.println("*             Einstellungen            *");
+        System.out.println("*             Settings                 *");
         System.out.println("****************************************");
         System.out.println("COMMANDS:");
-        System.out.println("(Z) Zeitausgabe");
-        System.out.println("(B) Zurück ");
+        System.out.println("(Z) Time Output");
+        System.out.println("(B) Back ");
         System.out.println("(Q) Quit");
         System.out.println();
 
@@ -203,41 +205,41 @@ public class TimeZoneConverter{
             case "B" -> {
             }
             case "Q" -> {
-                System.out.println("Auf Wiedersehen!");
+                System.out.println("Goodbye!");
                 System.exit(0);
             }
-            default -> System.out.println("Ungültige Eingabe. Bitte versuche es erneut.");
+            default -> System.out.println("Invalid input. Please try again.");
         }
     }
 
-    // Einstellungen für die Zeitausgabe anzeigen
+    // Display time output settings
     private static void displayTimeOutputSettings() {
         System.out.println("****************************************");
-        System.out.println("*         Zeitausgabe-Einstellungen    *");
+        System.out.println("*         Time Output Settings         *");
         System.out.println("****************************************");
-        System.out.println("Wähle das Zeitformat:");
-        System.out.println("(M) Militärzeit (24H Uhr)");
-        System.out.println("(T) Standardzeit (12H Uhr)");
-        System.out.println("(B) Zurück zum Einstellungen-Menü");
+        System.out.println("Choose the time format:");
+        System.out.println("(M) Military Time (24H)");
+        System.out.println("(T) Standard Time (12H)");
+        System.out.println("(B) Back to Settings Menu");
         System.out.println();
 
         String input = scanner.nextLine();
         switch (input.toUpperCase()) {
             case "M" -> {
                 isMilitaryTime = true;
-                System.out.println("Militärzeit (24H Uhr) aktiviert.");
+                System.out.println("Military Time (24H) enabled.");
             }
             case "T" -> {
                 isMilitaryTime = false;
-                System.out.println("Standardzeit (12H Uhr) aktiviert.");
+                System.out.println("Standard Time (12H) enabled.");
             }
             case "B" -> {
             }
-            default -> System.out.println("Ungültige Eingabe. Bitte versuche es erneut.");
+            default -> System.out.println("Invalid input. Please try again.");
         }
     }
 
-    // Zeit formatieren
+    // Format time
     private static String formatTime(ZonedDateTime time) {
         DateTimeFormatter formatter;
         if (isMilitaryTime) {
@@ -246,5 +248,25 @@ public class TimeZoneConverter{
             formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a");
         }
         return time.format(formatter);
+    }
+
+    // Run tests
+    private static void runTests() {
+        System.out.println("Running tests...");
+        // Add your test commands here
+        // Example test: Convert time from Europe/Berlin to America/Los_Angeles
+        String sourceZoneId = "Europe/Berlin";
+        String targetZoneId = "America/Los_Angeles";
+        String inputTime = "2024-04-16 15:30";
+        try {
+            ZoneId sourceZone = ZoneId.of(sourceZoneId);
+            ZoneId targetZone = ZoneId.of(targetZoneId);
+            LocalDateTime timeToConvert = LocalDateTime.parse(inputTime, formatter);
+            ZonedDateTime zonedDateTime = ZonedDateTime.of(timeToConvert, sourceZone);
+            ZonedDateTime convertedZonedDateTime = zonedDateTime.withZoneSameInstant(targetZone);
+            System.out.println("Test Passed: " + formatTime(convertedZonedDateTime) + " " + targetZoneId);
+        } catch (DateTimeException e) {
+            System.out.println("Test Failed: " + e.getMessage());
+        }
     }
 }
